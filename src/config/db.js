@@ -7,5 +7,5 @@ mongoose.connect(DB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
         logger.info('mongoose connection successful')
     })
     .catch((err) => {
-        logger.error(err.message);
+        logger.error(err);
     });
