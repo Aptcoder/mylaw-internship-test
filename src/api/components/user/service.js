@@ -1,6 +1,6 @@
 const logger = require("../../../config/logger");
 
-export default class UserService {
+class UserService {
 
     constructor(userModel){
         this.userModel = userModel;
@@ -17,3 +17,5 @@ export default class UserService {
         }
     } 
 }
+
+module.exports = UserService;
