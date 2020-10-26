@@ -1,6 +1,7 @@
 const http = require('http');
 const app = require('./api/app');
 const logger = require('./config/logger');
+require('./config/db');
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
