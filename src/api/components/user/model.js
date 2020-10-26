@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    trim: true
+    trim: true,
+    index: true
   },
   password: {
     type: String,
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin']
   }
 }, { timestamps: true });
-
+userSchema.indexes()
 userSchema.pre('save', async function () {
   const user = this;
   if (!this.isNew) {
@@ -38,6 +39,7 @@ userSchema.pre('save', async function () {
   }
   const newPassword = await bcrypt.hash(user.password, 10);
   user.password = newPassword;
+  user.permissionLevel = 'user';
 });
 
 userSchema.statics.generateToken = function (user) {

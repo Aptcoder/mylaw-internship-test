@@ -8,7 +8,7 @@ class AppError extends Error {
 
 const handleError = (res, err) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Something went wrong';
+  const message = err.message.trim() || 'Something went wrong';
   return res.status(statusCode).send({
     status: 'error',
     message
