@@ -16,13 +16,11 @@ exports.userLoginValidator = () => ([
 exports.newProductValidator = () => ([
   body('name').isString(),
   body('price').isNumeric(),
-  body('category').custom((category) => new Promise((resolve, reject) => {
+  body('category').custom((category) => {
     if (!mongoose.isValidObjectId(category)) {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      return reject('Invalid value for category field');
+      return Promise.reject('Invalid value for category field');
     }
-    return resolve();
-  }))
+  })
 ]);
 
 exports.getValidationMessages = (req) => {
