@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin']
   }
 }, { timestamps: true });
-userSchema.indexes()
+
 userSchema.pre('save', async function () {
   const user = this;
   if (!this.isNew) {

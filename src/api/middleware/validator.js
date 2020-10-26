@@ -23,6 +23,10 @@ exports.newProductValidator = () => ([
   })
 ]);
 
+exports.newCategoryValidator = () => ([
+  body('name').isString(),
+]);
+
 exports.getValidationMessages = (req) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
