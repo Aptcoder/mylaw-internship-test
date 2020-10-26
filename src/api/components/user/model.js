@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -23,7 +24,17 @@ const userSchema = new mongoose.Schema({
         default: 'user',
         enum: ['user', 'admin']
     }
-});
+}, {timestamps});
+
+userSchema.pre('save', function async (){
+    const user = this;
+    if(!this.isNew){
+        return;
+    }
+    const newPassword = await bcrypt.hash(user.password, 10);
+    user.password = newPassword;
+    await user.save();
+})
 
 userSchema.methods.toJSON = function () {
     const user = this.toObject();
