@@ -6,9 +6,11 @@ export default class UserService {
         this.userModel = userModel;
     }
 
-    async addUser(userData){
+    async registerUser(userData){
         try {
-            let newUser = new this.userModel(userData)
+            let user = await this.userModel.create(userData);
+            let token = await this.userModel.generateToken(user);
+            return {user, token};
         }catch (err){
             logger.error(err);
             throw new Error('Could not add user data')

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const {JWT_KEY} = require('../../../config');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -34,7 +35,25 @@ userSchema.pre('save', function async (){
     const newPassword = await bcrypt.hash(user.password, 10);
     user.password = newPassword;
     await user.save();
-})
+});
+
+userSchema.statics.generateToken = function(user){
+    const User = this;
+    const payload = {
+        email: user.email
+    };
+    return new Promise((resolve, reject) => {
+        jwt.sign(payload, JWT_KEY  , {
+            expiresIn: '1d',
+        }, (err, token) => {
+            if(err){
+                return reject(err);
+            };
+            resolve(token)
+        });
+    })
+
+}
 
 userSchema.methods.toJSON = function () {
     const user = this.toObject();
