@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_KEY } = require('../../../config');
 
+// User data access layer
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,6 +15,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
     trim: true
   },
   password: {
@@ -51,6 +54,11 @@ userSchema.statics.generateToken = function (user) {
       return resolve(token);
     });
   });
+};
+
+userSchema.statics.comparePassword = async function (inputPassword, userPassword) {
+  const result = await bcrypt.compare(inputPassword, userPassword);
+  return result;
 };
 
 userSchema.methods.toJSON = function () {
