@@ -2,6 +2,7 @@ const { getValidationMessages } = require('../../middleware/validator');
 const { AppError } = require('../../../services/error');
 const UserService = require('./service');
 const User = require('./model');
+const { responseHandler } = require('../../../services/response');
 
 module.exports = {
   registerUser: async (req, res, next) => {
@@ -17,10 +18,7 @@ module.exports = {
       }
       const data = await userServiceInstance.registerUser(req.body);
       res.set('x-auth', data.token);
-      return res.status(201).send({
-        message: 'user created',
-        status: 'success'
-      });
+      return responseHandler(res, 201, 'user created');
     } catch (err) {
       return next(err);
     }
@@ -41,10 +39,7 @@ module.exports = {
         throw new AppError(401, 'Incorrect password');
       }
       res.set('x-auth', result.token);
-      return res.status(200).send({
-        message: 'Login sucessful',
-        status: 'success'
-      });
+      return responseHandler(res, 200, 'Login sucessful');
     } catch (err) {
       return next(err);
     }

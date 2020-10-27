@@ -3,6 +3,7 @@ const { ProductService } = require('./service');
 const { AppError } = require('../../../services/error');
 const { getQueryData } = require('../../../services/query');
 const { getValidationMessages } = require('../../middleware/validator');
+const { responseHandler } = require('../../../services/response');
 
 module.exports = {
   addNewProduct: async (req, res, next) => {
@@ -13,10 +14,7 @@ module.exports = {
     try {
       const ProductServiceInstance = new ProductService(Product);
       await ProductServiceInstance.createNewProduct(req.body);
-      return res.status(201).send({
-        status: 'success',
-        message: 'Product created successfully'
-      });
+      return responseHandler(res, 201, 'Product created successfully');
     } catch (err) {
       return next(err);
     }
@@ -29,13 +27,7 @@ module.exports = {
         .limit(queryData.options.limit)
         .sort({ [queryData.options.sortBy]: queryData.options.orderBy })
         .populate('categories');
-      return res.send({
-        status: 'success',
-        message: 'Products',
-        data: {
-          products
-        }
-      });
+      return responseHandler(res, 200, 'Products', { products });
     } catch (err) {
       return next(err);
     }
@@ -47,10 +39,7 @@ module.exports = {
       if (!result.n) {
         throw new AppError(404, 'Product not found');
       }
-      return res.send({
-        status: 'success',
-        message: 'Product updated'
-      });
+      return responseHandler(res, 200, 'Product updated');
     } catch (err) {
       return next(err);
     }
@@ -61,13 +50,7 @@ module.exports = {
       if (!product) {
         throw new AppError(404, 'Category not found');
       }
-      return res.send({
-        status: 'success',
-        message: 'Product',
-        data: {
-          product
-        }
-      });
+      return responseHandler(res, 200, 'Product', { product });
     } catch (err) {
       return next(err);
     }
@@ -76,10 +59,7 @@ module.exports = {
   deleteProduct: async (req, res, next) => {
     try {
       await Product.deleteOne({ _id: req.params.id });
-      return res.status(200).send({
-        status: 'success',
-        message: 'Product deleted'
-      });
+      return responseHandler(res, 200, 'Product Deleted');
     } catch (err) {
       return next(err);
     }

@@ -1,5 +1,6 @@
 const { getValidationMessages } = require('../../middleware/validator');
 const { AppError } = require('../../../services/error');
+const { responseHandler } = require('../../../services/response');
 const AdminService = require('./service');
 const User = require('../user/model');
 
@@ -17,10 +18,7 @@ module.exports = {
       }
       const data = await adminServiceInstance.registerAdmin(req.body);
       res.set('x-auth', data.token);
-      return res.status(201).send({
-        message: 'admin created',
-        status: 'success'
-      });
+      return responseHandler(res, 201, 'admin created');
     } catch (err) {
       return next(err);
     }
@@ -41,10 +39,7 @@ module.exports = {
         throw new AppError(401, 'Incorrect password');
       }
       res.set('x-auth', result.token);
-      return res.status(200).send({
-        message: 'Login sucessful',
-        status: 'success'
-      });
+      return responseHandler(res, 200, 'Login sucessful');
     } catch (err) {
       return next(err);
     }
