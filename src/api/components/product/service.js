@@ -19,6 +19,9 @@ class ProductService {
   async editProduct(newData, id) {
     try {
       const updates = _.pick(newData, ['name', 'details', 'price']);
+      if (newData.categories) {
+        updates.$addToSet = { categories: { $each: newData.categories } };
+      }
       const result = await this.productModel.updateOne({ _id: id }, updates);
       return result;
     } catch (err) {

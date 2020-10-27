@@ -1,6 +1,7 @@
 const Product = require('./model');
 const { ProductService } = require('./service');
 const { AppError } = require('../../../services/error');
+const { getQueryData } = require('../../../services/query');
 const { getValidationMessages } = require('../../middleware/validator');
 
 module.exports = {
@@ -11,8 +12,7 @@ module.exports = {
     }
     try {
       const ProductServiceInstance = new ProductService(Product);
-      const product = await ProductServiceInstance.createNewProduct(req.body);
-      console.log('product', product);
+      await ProductServiceInstance.createNewProduct(req.body);
       return res.status(201).send({
         status: 'success',
         message: 'Product created successfully'
@@ -22,8 +22,13 @@ module.exports = {
     }
   },
   getProducts: async (req, res, next) => {
+    const queryData = getQueryData(req.query);
     try {
-      const products = await Product.find({});
+      const products = await Product.find(queryData.findQueries)
+        .skip(queryData.options.skip)
+        .limit(queryData.options.limit)
+        .sort({ [queryData.options.sortBy]: queryData.options.orderBy })
+        .populate('categories');
       return res.send({
         status: 'success',
         message: 'Products',
@@ -38,7 +43,7 @@ module.exports = {
   editProduct: async (req, res, next) => {
     try {
       const productServiceInstance = new ProductService(Product);
-      const result = await productServiceInstance.editCategory(req.body, req.params.id);
+      const result = await productServiceInstance.editProduct(req.body, req.params.id);
       if (!result.n) {
         throw new AppError(404, 'Product not found');
       }
@@ -52,15 +57,15 @@ module.exports = {
   },
   getProduct: async (req, res, next) => {
     try {
-      const category = await Product.findById(req.params.id);
-      if (!category) {
+      const product = await Product.findById(req.params.id).populate('categories');
+      if (!product) {
         throw new AppError(404, 'Category not found');
       }
       return res.send({
         status: 'success',
         message: 'Product',
         data: {
-          category
+          product
         }
       });
     } catch (err) {
