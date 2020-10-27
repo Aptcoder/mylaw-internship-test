@@ -1,4 +1,5 @@
-const logger = require("../../../config/logger");
+const _ = require('lodash');
+const logger = require('../../../config/logger');
 
 class CategoryService {
   constructor(categoryModel) {
@@ -12,6 +13,17 @@ class CategoryService {
     } catch (err) {
       logger.error(err);
       throw new Error('Could not create category');
+    }
+  }
+
+  async editCategory(newData, id) {
+    try {
+      const updates = _.pick(newData, ['name', 'details']);
+      const result = await this.categoryModel.updateOne({ _id: id }, updates);
+      return result;
+    } catch (err) {
+      logger.error(err);
+      throw new Error('Could not edit category');
     }
   }
 }

@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body,checkSchema, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Category = require('../components/category/model');
 
@@ -22,6 +22,15 @@ exports.newProductValidator = () => ([
     }
   })
 ]);
+exports.categoryIdValidator = (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send({
+      status: 'error',
+      message: 'Invalid id value'
+    });
+  }
+  return next();
+};
 
 exports.newCategoryValidator = () => ([
   body('name').isString(),
