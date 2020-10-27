@@ -1,4 +1,5 @@
-const logger = require("../../../config/logger");
+const _ = require('lodash');
+const logger = require('../../../config/logger');
 
 class ProductService {
   constructor(productModel) {
@@ -12,6 +13,17 @@ class ProductService {
     } catch (err) {
       logger.error(err);
       throw new Error('Could not create product');
+    }
+  }
+
+  async editProduct(newData, id) {
+    try {
+      const updates = _.pick(newData, ['name', 'details', 'price']);
+      const result = await this.productModel.updateOne({ _id: id }, updates);
+      return result;
+    } catch (err) {
+      logger.error(err);
+      throw new Error('Could not edit product');
     }
   }
 }

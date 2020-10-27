@@ -1,4 +1,4 @@
-const { body,checkSchema, validationResult } = require('express-validator');
+const { body, checkSchema, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Category = require('../components/category/model');
 
@@ -16,10 +16,13 @@ exports.userLoginValidator = () => ([
 exports.newProductValidator = () => ([
   body('name').isString(),
   body('price').isNumeric(),
-  body('category').custom((category) => {
-    if (!mongoose.isValidObjectId(category)) {
-      return Promise.reject('Invalid value for category field');
-    }
+  body('categories').custom((categories) => {
+    categories.forEach((category) => {
+      if (!mongoose.isValidObjectId(category)) {
+        throw new Error('Invalid value in category field');
+      }
+    });
+    return true;
   })
 ]);
 exports.categoryIdValidator = (req, res, next) => {
@@ -33,7 +36,7 @@ exports.categoryIdValidator = (req, res, next) => {
 };
 
 exports.newCategoryValidator = () => ([
-  body('name').isString(),
+  body('name').isString()
 ]);
 
 exports.getValidationMessages = (req) => {
