@@ -20,6 +20,6 @@ const port = normalizePort(process.env.PORT || '5000');
 
 // create a http server
 http.createServer(app)
-    .listen(port, () => {
-        logger.info(`Server is listening at port ${port}`);
-    })
+  .listen(port, () => {
+    logger.info(`Server is listening at port ${port}`);
+  });
