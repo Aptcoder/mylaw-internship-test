@@ -16,13 +16,13 @@ class ProductService {
     }
   }
 
-  async editProduct(newData, id) {
+  async editProduct(newData, productId) {
     try {
       const updates = _.pick(newData, ['name', 'details', 'price']);
       if (newData.categories) {
         updates.$addToSet = { categories: { $each: newData.categories } };
       }
-      const result = await this.productModel.updateOne({ _id: id }, updates);
+      const result = await this.productModel.updateOne({ _id: productId }, updates);
       return result;
     } catch (err) {
       logger.error(err);

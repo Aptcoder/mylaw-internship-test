@@ -1,6 +1,5 @@
-const { body, checkSchema, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
-const Category = require('../components/category/model');
 
 exports.userRegValidator = () => ([
   body('email').isString().isEmail(),
@@ -17,6 +16,9 @@ exports.newProductValidator = () => ([
   body('name').isString(),
   body('price').isNumeric(),
   body('categories').custom((categories) => {
+    if (categories.length < 1) {
+      throw new Error('Product must have at least one category');
+    }
     categories.forEach((category) => {
       if (!mongoose.isValidObjectId(category)) {
         throw new Error('Invalid value in category field');

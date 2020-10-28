@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { newCategoryValidator, categoryIdValidator } = require('../../middleware/validator');
+const { newCategoryValidator, categoryIdValidator } = require('../../middleware/validators');
 
 const {
   addCategory, getCategories, getCategory, editCategory, deleteCategory, getProductsInCategory

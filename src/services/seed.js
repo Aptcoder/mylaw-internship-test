@@ -3,7 +3,7 @@ const logger = require('../config/logger');
 
 exports.seedCategories = async () => {
   try {
-    const count = await Category.count({});
+    const count = await Category.countDocuments({});
     if (count < 3) {
       await Category.insertMany([
         { name: 'bags', details: 'Leather and all type of hand bags' },

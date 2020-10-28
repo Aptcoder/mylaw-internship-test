@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { registerUser, loginUser } = require('./controllers');
-const { userRegValidator, userLoginValidator } = require('../../middleware/validator');
+const { userRegValidator, userLoginValidator } = require('../../middleware/validators');
 const { adminAuthorization, authentication } = require('../../middleware/auth');
 
 router.get('/', (req, res) => {
@@ -18,6 +18,6 @@ router.put('/:id/make-admin', authentication, adminAuthorization, (req, res) => 
   });
 });
 
-// admin routes 
+// admin routes
 
 module.exports = router;

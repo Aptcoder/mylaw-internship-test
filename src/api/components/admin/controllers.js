@@ -1,4 +1,4 @@
-const { getValidationMessages } = require('../../middleware/validator');
+const { getValidationMessages } = require('../../middleware/validators');
 const { AppError } = require('../../../services/error');
 const { responseHandler } = require('../../../services/response');
 const AdminService = require('./service');

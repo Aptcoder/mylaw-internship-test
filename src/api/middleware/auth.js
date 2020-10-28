@@ -26,7 +26,7 @@ module.exports = {
       return next();
     } catch (err) {
       logger.error(err);
-      return next(err);
+      return next(new AppError(403, 'Not allowed.'));
     }
   },
 

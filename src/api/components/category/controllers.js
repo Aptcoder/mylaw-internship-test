@@ -4,7 +4,7 @@ const Product = require('../product/model');
 const { AppError } = require('../../../services/error');
 const { responseHandler } = require('../../../services/response');
 const { getQueryData } = require('../../../services/query');
-const { getValidationMessages } = require('../../middleware/validator');
+const { getValidationMessages } = require('../../middleware/validators');
 
 module.exports = {
   addCategory: async (req, res, next) => {
@@ -67,7 +67,7 @@ module.exports = {
   },
   getProductsInCategory: async (req, res, next) => {
     try {
-      const products = await Product.find({categories: req.params.id });
+      const products = await Product.find({ categories: req.params.id });
       return responseHandler(res, 200, 'Products', { products });
     } catch (err) {
       return next(err);

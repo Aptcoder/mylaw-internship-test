@@ -1,5 +1,11 @@
 const _ = require('lodash');
-
+/**
+ * 
+ * @param {object} query - query object from express, contains keys and values fromurl
+ * query parameters
+ * @returns { findQueries, options } - findQueries is object to be used in the find query; options
+ * are the query options-- sort value etc
+ */
 exports.getQueryData = (query) => {
   const queryEntries = _.pick(query, ['name', 'details']);
   const queryEntriesArray = Object.entries(queryEntries);

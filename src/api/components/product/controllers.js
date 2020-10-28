@@ -2,7 +2,7 @@ const Product = require('./model');
 const { ProductService } = require('./service');
 const { AppError } = require('../../../services/error');
 const { getQueryData } = require('../../../services/query');
-const { getValidationMessages } = require('../../middleware/validator');
+const { getValidationMessages } = require('../../middleware/validators');
 const { responseHandler } = require('../../../services/response');
 
 module.exports = {
